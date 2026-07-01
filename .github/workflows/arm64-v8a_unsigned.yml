@@ -1,4 +1,4 @@
-name: Build arm64-v8a APK (unsigned)
+name: Build arm64 Release APK (unsigned)
 
 on:
   workflow_dispatch:
@@ -20,11 +20,28 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
+      # Narrows the NDK abiFilters to arm64-v8a only for this CI run.
+      # This only edits the checked-out copy on the runner, the committed
+      # app/build.gradle.kts in the repo is never touched.
       - name: Restrict native libs to arm64-v8a only
         run: |
           sed -i 's/abiFilters += arrayOf("arm64-v8a", "armeabi-v7a")/abiFilters += arrayOf("arm64-v8a")/' app/build.gradle.kts
 
-      - name: Build Release APK (unsigned, arm64-v8a only)
+      # Newer AGP versions throw a hard error ("missing required property
+      # storeFile") if a signingConfig is assigned to a build type even when
+      # its storeFile was never set, instead of silently falling back to an
+      # unsigned APK. No signing secrets are provided in this workflow, so we
+      # drop the assignment line entirely for this CI run to get a real
+      # unsigned build without touching the committed file.
+      - name: Strip release signingConfig assignment (force unsigned)
+        run: |
+          sed -i '/signingConfig = signingConfigs.findByName("release")/d' app/build.gradle.kts
+
+      # No SIGNING_* secrets are passed here and release_key.jks isn't present
+      # on a fresh checkout, so signingConfigs.release stays unset and AGP
+      # outputs an unsigned APK, same fallback behavior already coded in
+      # app/build.gradle.kts ("No keystore found, APK will be unsigned").
+      - name: Build Release APK (unsigned, arm64 only)
         run: ./gradlew assembleRelease
 
       - name: Locate built APK
@@ -41,5 +58,6 @@ jobs:
       - name: Upload APK as workflow artifact
         uses: actions/upload-artifact@v4
         with:
-          name: chocola-arm64-v8a-unsigned
+          name: chocola-arm64-unsigned
           path: ${{ steps.locate.outputs.apk_path }}
+          
