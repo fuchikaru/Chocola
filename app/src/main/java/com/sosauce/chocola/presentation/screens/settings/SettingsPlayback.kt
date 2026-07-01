@@ -63,7 +63,6 @@ import androidx.compose.ui.util.fastForEachIndexed
 import com.sosauce.chocola.R
 import com.sosauce.chocola.data.datastore.rememberEnableEqualizer
 import com.sosauce.chocola.data.datastore.rememberPauseOnMute
-import com.sosauce.chocola.data.datastore.rememberSeekButtonsDuration
 import com.sosauce.chocola.presentation.screens.settings.compenents.EqualizerPresetSelector
 import com.sosauce.chocola.presentation.screens.settings.compenents.SettingsSwitch
 import com.sosauce.chocola.presentation.screens.settings.compenents.SettingsWithTitle
@@ -80,23 +79,9 @@ fun SettingsPlayback(
 ) {
 
     var pauseOnMute by rememberPauseOnMute()
-    var seekButtonsDuration by rememberSeekButtonsDuration()
     var enableEqualizer by rememberEnableEqualizer()
 
     Column {
-        SettingsWithTitle(
-            title = R.string.playback
-        ) {
-            SliderSettingsCards(
-                value = seekButtonsDuration,
-                onValueChange = { seekButtonsDuration = it },
-                topDp = 24.dp,
-                bottomDp = 24.dp,
-                unit = "s",
-                text = stringResource(R.string.seek_buttons_duration)
-            )
-        }
-
         SettingsWithTitle(
             title = R.string.audio
         ) {
