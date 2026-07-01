@@ -35,7 +35,6 @@ import com.sosauce.chocola.data.datastore.PreferencesKeys.PALETTE_STYLE
 import com.sosauce.chocola.data.datastore.PreferencesKeys.PAUSE_ON_MUTE
 import com.sosauce.chocola.data.datastore.PreferencesKeys.PLAYLIST_SORT
 import com.sosauce.chocola.data.datastore.PreferencesKeys.SAF_TRACKS
-import com.sosauce.chocola.data.datastore.PreferencesKeys.SEEK_BUTTONS_DURATION
 import com.sosauce.chocola.data.datastore.PreferencesKeys.SHOW_ALBUM_NAME
 import com.sosauce.chocola.data.datastore.PreferencesKeys.SHOW_SHUFFLE_BUTTON
 import com.sosauce.chocola.data.datastore.PreferencesKeys.SNAP_SPEED_N_PITCH
@@ -102,7 +101,6 @@ data object PreferencesKeys {
     val SORT_ALBUMS_ASCENDING = booleanPreferencesKey("SORT_ALBUMS_ASCENDING")
     val SORT_PLAYLISTS_ASCENDING = booleanPreferencesKey("SORT_PLAYLISTS_ASCENDING")
     val PALETTE_STYLE = stringPreferencesKey("PALETTE_STYLE")
-    val SEEK_BUTTONS_DURATION = intPreferencesKey("SEEK_BUTTONS_DURATION")
     val CENTER_TITLE = booleanPreferencesKey("CENTER_TITLE")
     val EQUALIZER_BANDS = stringPreferencesKey("EQUALIZER_BANDS")
     val EQUALIZER_ENABLED = booleanPreferencesKey("EQUALIZER_ENABLED")
@@ -234,10 +232,6 @@ fun rememberSortPlaylistsAscending() =
 @Composable
 fun rememberPaletteStyle() =
     rememberPreference(key = PALETTE_STYLE, defaultValue = CutePaletteStyle.FIDELITY)
-
-@Composable
-fun rememberSeekButtonsDuration() =
-    rememberPreference(key = SEEK_BUTTONS_DURATION, defaultValue = 5)
 
 @Composable
 fun rememberCenterTitle() =
