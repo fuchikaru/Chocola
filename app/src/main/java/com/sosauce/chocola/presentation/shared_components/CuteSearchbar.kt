@@ -283,26 +283,12 @@ fun SharedTransitionScope.CuteSearchbar(
 //                    }
                 }
                 val animatedPosition by animateFloatAsState(musicState.position.toFloat(), tween(500))
-                Column(
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(24.dp))
-                        .clickable(
-                            enabled = musicState.isPlayerReady
-                        ) { showFullPlayer = true }
-                        .background(MaterialTheme.colorScheme.surfaceContainer)
-                        .drawBehind {
-                            val fraction = if (musicState.track.durationMs == 0L) {
-                                0f
-                            } else {
-                                animatedPosition / musicState.track.durationMs.toFloat()
-                            }
 
-                            val drawWidth = size.width * fraction
-                            drawRect(
-                                color = surfaceContainerHigh,
-                                size = Size(drawWidth, size.height)
-                            )
-                        }
+                // Mini player and nav/search are now two visually separate
+                // floating pills (PixelPlay-style) instead of one shared
+                // container, with a gap between them.
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     AnimatedVisibility(
                         visible = musicState.isPlayerReady,
@@ -311,8 +297,26 @@ fun SharedTransitionScope.CuteSearchbar(
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier
-                                .padding(start = 10.dp)
                                 .fillMaxWidth()
+                                .clip(RoundedCornerShape(28.dp))
+                                .clickable(
+                                    enabled = musicState.isPlayerReady
+                                ) { showFullPlayer = true }
+                                .background(MaterialTheme.colorScheme.surfaceContainer)
+                                .drawBehind {
+                                    val fraction = if (musicState.track.durationMs == 0L) {
+                                        0f
+                                    } else {
+                                        animatedPosition / musicState.track.durationMs.toFloat()
+                                    }
+
+                                    val drawWidth = size.width * fraction
+                                    drawRect(
+                                        color = surfaceContainerHigh,
+                                        size = Size(drawWidth, size.height)
+                                    )
+                                }
+                                .padding(start = 10.dp)
                         ) {
                             Row(
                                 modifier = Modifier.weight(1f),
@@ -374,7 +378,8 @@ fun SharedTransitionScope.CuteSearchbar(
                         Column(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .clip(RoundedCornerShape(24.dp))
+                                .clip(RoundedCornerShape(28.dp))
+                                .background(MaterialTheme.colorScheme.surfaceContainer)
                                 .padding(6.dp)
                         ) {
                             SharedTransitionLayout {
